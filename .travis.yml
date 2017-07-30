@@ -1,0 +1,34 @@
+language: rust
+sudo: false
+
+rust:
+  - nightly
+  - beta
+  - stable
+
+before_script:
+  - pip install 'travis-cargo<0.2' --user
+  - export PATH=$HOME/.local/bin:$PATH
+
+os:
+  - linux
+  - osx
+
+script:
+  - cargo build --verbose
+  - cargo test --verbose -- --nocapture
+  - |
+      if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then
+        travis-cargo build &&
+        travis-cargo test &&
+        travis-cargo --only stable doc;
+      fi
+
+after_success:
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then travis-cargo --only stable doc-upload; fi
+
+# needed to forbid travis-cargo to pass `--feature nightly` when building with nightly compiler
+env:
+  global:
+    - TRAVIS_CARGO_NIGHTLY_FEATURE=""
+    - RUST_BACKTRACE=full
