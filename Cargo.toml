@@ -2,7 +2,7 @@
 name        = "shell_doctest"
 version     = "0.1.0"
 authors     = ["Philipp Keller <philipp.keller@gmail.com>"]
-description = "test your binaries as doctests in a bash environment"
+description = "Test your binaries as doctests in a bash environment"
 license     = "MIT"
 categories  = ["development-tools", "development-tools::cargo-plugins", "development-tools::build-utils", "development-tools::testing"]
 readme      = "README.md"
