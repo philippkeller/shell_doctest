@@ -1,0 +1,12 @@
+[package]
+name        = "shell_doctest"
+version     = "0.1.0"
+authors     = ["Philipp Keller <philipp.keller@gmail.com>"]
+description = "test your binaries as doctests in a bash environment"
+license     = "MIT"
+categories  = ["development-tools", "development-tools::cargo-plugins", "development-tools::build-utils", "development-tools::testing"]
+readme      = "README.md"
+keywords    = ["binaries", "testing", "bash", "pty", "doctest"]
+
+[dependencies]
+rexpect = "0.1"
