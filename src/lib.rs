@@ -8,6 +8,7 @@ fn exp_bash(script:String, timeout:Option<u64>) {
         let mut p = session::spawn_bash(timeout)?;
         let mut last_cmd = None;
         for line in script.lines() {
+            println!("{}", line);
             if line.starts_with('$') {
                 if last_cmd != None {
                     p.wait_for_prompt()?;
@@ -18,6 +19,7 @@ fn exp_bash(script:String, timeout:Option<u64>) {
             } else if line.starts_with("-->") {
                 let input:&str = line[4..].trim();
                 if input.starts_with('^') && input.len() == 2 {
+                    println!("send ctrl-{}", input.chars().nth(1).unwrap());
                     p.send_control(input.chars().nth(1).unwrap())?;
                 } else {
                     p.send_line(input)?;
@@ -62,4 +64,17 @@ mod tests {
                   --> ^C\n\
                   $".to_string(), Some(1000));
     }
+
+    #[test]
+    fn test_sleep2() {
+        exp_bash("$ sleep 999\n\
+                  --> ^Z\n\
+                  $ echo hans\n\
+                  hans\n\
+                  $ fg\n\
+                  --> ^C\n\
+                  $\
+                  ".to_string(), None);
+    }
+
 }

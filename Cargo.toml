@@ -9,4 +9,4 @@ readme      = "README.md"
 keywords    = ["binaries", "testing", "bash", "pty", "doctest"]
 
 [dependencies]
-rexpect = "0.1"
+rexpect = { git = "https://github.com/philippkeller/rexpect" }
