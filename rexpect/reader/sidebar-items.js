@@ -1,0 +1,1 @@
+initSidebarItems({"enum":[["ReadUntil",""]],"fn":[["find","find first occurrence of needle within buffer"]],"struct":[["NBReader","Non blocking reader"],["Regex","A compiled regular expression for matching Unicode strings."]]});

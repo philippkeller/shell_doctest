@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["signal",""],["wait",""]],"struct":[["PtyProcess","Start a process in a forked tty so you can interact with it the same as you would within a terminal"]]});

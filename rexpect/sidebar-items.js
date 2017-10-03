@@ -1,0 +1,1 @@
+initSidebarItems({"mod":[["errors",""],["process","Start a process via pty"],["reader","Unblocking reader which supports waiting for strings/regexes and EOF to be present"],["session","Main module of rexpect: start new process and interact with it"]]});

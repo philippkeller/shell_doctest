@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `PtyBashSession` struct in crate `rexpect`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, PtyBashSession">
+
+    <title>rexpect::session::PtyBashSession - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../../normalize.css">
+    <link rel="stylesheet" type="text/css" href="../../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc struct">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'>Struct PtyBashSession</p><div class="block items"><ul><li><a href="#methods">Methods</a></li><li><a href="#deref-methods">Methods from Deref&lt;Target=PtySession&gt;</a></li><li><a href="#implementations">Trait Implementations</a></li></ul></div><p class='location'><a href='../index.html'>rexpect</a>::<wbr><a href='index.html'>session</a></p><script>window.sidebarCurrent = {name: 'PtyBashSession', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content">
+<h1 class='fqn'><span class='in-band'>Struct <a href='../index.html'>rexpect</a>::<wbr><a href='index.html'>session</a>::<wbr><a class="struct" href=''>PtyBashSession</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a class='srclink' href='../../src/rexpect/session.rs.html#227-230' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct PtyBashSession { /* fields omitted */ }</pre><div class='docblock'><p>Interact with a bash shell: execute programs, interact with ctrl-z, bg, etc.</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class="struct" href="../../rexpect/session/struct.PtyBashSession.html" title="struct rexpect::session::PtyBashSession">PtyBashSession</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/rexpect/session.rs.html#232-257' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.wait_for_prompt' class="method"><span id='wait_for_prompt.v' class='invisible'><code>fn <a href='#method.wait_for_prompt' class='fnname'>wait_for_prompt</a>(&amp;mut self) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></h4>
+<h4 id='method.execute' class="method"><span id='execute.v' class='invisible'><code>fn <a href='#method.execute' class='fnname'>execute</a>(&amp;mut self, cmd: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt;</code></span></h4>
+<div class='docblock'><p>Send cmd to bash and wait 10ms to let the scheduler run the command, then immediately
+return (nonblocking! i.e. does not wait for the cmd to finish)</p>
+
+<p>Caution: there is no guarantee that after the 10ms the command is actually started!
+To be sure that the startup time of cmd is over you best wait for a certain output
+with <code>exp_string()</code> or another <code>ext_*</code> method</p>
+
+<p>Q: Why is the 10ms sleep needed?
+A: Executing a command in bash causes a fork. If the Unix kernel chooses the
+   parent process (bash) to go first and the bash process sends e.g. Ctrl-C then the
+   Ctrl-C goes to nirvana.
+   A 10ms sleep however makes the scheduler do a context switch and there is a quite
+   high chance that the just executed cmd comes next (on this or on another free core)
+   so when the 10ms sleep is over and the bash process is eligible for being scheduled
+   in the process has already started and subsequent input is received by the process</p>
+</div></div><h2 id='deref-methods'>Methods from <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html" title="trait core::ops::deref::Deref">Deref</a>&lt;Target = <a class="struct" href="../../rexpect/session/struct.PtySession.html" title="struct rexpect::session::PtySession">PtySession</a>&gt;</h2><div class='impl-items'><h4 id='method.send_line' class="method"><span id='send_line.v' class='invisible'><code>fn <a href='#method.send_line' class='fnname'>send_line</a>(&amp;mut self, line: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;</code></span></h4>
+<div class='docblock'><p>sends string and a newline to process</p>
+
+<p>this is guaranteed to be flushed to the process
+returns number of written bytes</p>
+</div><h4 id='method.send' class="method"><span id='send.v' class='invisible'><code>fn <a href='#method.send' class='fnname'>send</a>(&amp;mut self, s: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.usize.html">usize</a>&gt;</code></span></h4>
+<div class='docblock'><p>Send string to process. As stdin of the process is most likely buffered, you&#39;d
+need to call <code>flush()</code> after <code>send()</code> to make the process actually see your input.</p>
+
+<p>Returns number of written bytes</p>
+</div><h4 id='method.send_control' class="method"><span id='send_control.v' class='invisible'><code>fn <a href='#method.send_control' class='fnname'>send_control</a>(&amp;mut self, c: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.char.html">char</a>) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt;</code></span></h4>
+<div class='docblock'><p>Send a control code to the running process and consume resulting output line
+(which is empty because echo is off)</p>
+
+<p>E.g. <code>send_control(&#39;c&#39;)</code> sends ctrl-c. Upper/smaller case does not matter.</p>
+</div><h4 id='method.flush' class="method"><span id='flush.v' class='invisible'><code>fn <a href='#method.flush' class='fnname'>flush</a>(&amp;mut self) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">()</a>&gt;</code></span></h4>
+<div class='docblock'><p>Make sure all bytes written via <code>send()</code> are sent to the process</p>
+</div><h4 id='method.read_line' class="method"><span id='read_line.v' class='invisible'><code>fn <a href='#method.read_line' class='fnname'>read_line</a>(&amp;mut self) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></h4>
+<div class='docblock'><p>Read one line (blocking!) and return line without the newline
+(waits until \n is in the output fetches the line and removes \r at the end if present)</p>
+</div><h4 id='method.try_read' class="method"><span id='try_read.v' class='invisible'><code>fn <a href='#method.try_read' class='fnname'>try_read</a>(&amp;mut self) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.char.html">char</a>&gt;</code></span></h4>
+<div class='docblock'><p>Return <code>Some(c)</code> if a char is ready in the stdout stream of the process, return <code>None</code>
+otherwise. This is nonblocking.</p>
+</div><h4 id='method.exp_eof' class="method"><span id='exp_eof.v' class='invisible'><code>fn <a href='#method.exp_eof' class='fnname'>exp_eof</a>(&amp;mut self) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></h4>
+<div class='docblock'><p>Wait until we see EOF (i.e. child process has terminated)
+Return all the yet unread output</p>
+</div><h4 id='method.exp_regex' class="method"><span id='exp_regex.v' class='invisible'><code>fn <a href='#method.exp_regex' class='fnname'>exp_regex</a>(&amp;mut self, regex: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;</code></span></h4>
+<div class='docblock'><p>Wait until provided regex is seen on stdout of child process.
+Return a tuple:
+1. the yet unread output
+2. the matched regex</p>
+</div><h4 id='method.exp_string' class="method"><span id='exp_string.v' class='invisible'><code>fn <a href='#method.exp_string' class='fnname'>exp_string</a>(&amp;mut self, needle: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></h4>
+<div class='docblock'><p>Wait until provided string is seen on stdout of child process.
+Return the yet unread output (without the matched string)</p>
+</div><h4 id='method.exp_char' class="method"><span id='exp_char.v' class='invisible'><code>fn <a href='#method.exp_char' class='fnname'>exp_char</a>(&amp;mut self, needle: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.char.html">char</a>) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;</code></span></h4>
+<div class='docblock'><p>Wait until provided char is seen on stdout of child process.
+Return the yet unread output (without the matched char)</p>
+</div><h4 id='method.exp_any' class="method"><span id='exp_any.v' class='invisible'><code>fn <a href='#method.exp_any' class='fnname'>exp_any</a>(&amp;mut self, needles: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/vec/struct.Vec.html" title="struct alloc::vec::Vec">Vec</a>&lt;<a class="enum" href="../../rexpect/reader/enum.ReadUntil.html" title="enum rexpect::reader::ReadUntil">ReadUntil</a>&gt;) -&gt; <a class="type" href="../../rexpect/errors/type.Result.html" title="type rexpect::errors::Result">Result</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">(</a><a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>, <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a><a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.tuple.html">)</a>&gt;</code></span></h4>
+<div class='docblock'><p>Wait until any of the provided needles is found.</p>
+
+<p>Return a tuple with:
+1. the yet unread string, without the matching needle (empty in case of EOF and NBytes)
+2. the matched string</p>
+
+<h1 id='example' class='section-header'><a href='#example'>Example:</a></h1>
+<pre class="rust rust-example-rendered">
+<span class="kw">use</span> <span class="ident">rexpect</span>::{<span class="ident">spawn</span>, <span class="ident">ReadUntil</span>};
+
+<span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">s</span> <span class="op">=</span> <span class="ident">spawn</span>(<span class="string">&quot;cat&quot;</span>, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+<span class="ident">s</span>.<span class="ident">send_line</span>(<span class="string">&quot;hello, polly!&quot;</span>)<span class="question-mark">?</span>;
+<span class="ident">s</span>.<span class="ident">exp_any</span>(<span class="macro">vec</span><span class="macro">!</span>[<span class="ident">ReadUntil</span>::<span class="ident">String</span>(<span class="string">&quot;hello&quot;</span>.<span class="ident">into</span>()),
+               <span class="ident">ReadUntil</span>::<span class="ident">EOF</span>])<span class="question-mark">?</span>;</pre>
+</div></div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html" title="trait core::ops::deref::Deref">Deref</a> for <a class="struct" href="../../rexpect/session/struct.PtyBashSession.html" title="struct rexpect::session::PtyBashSession">PtyBashSession</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/rexpect/session.rs.html#260-265' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='associatedtype.Target' class="type"><span id='Target.t' class='invisible'><code>type <a href='https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html#associatedtype.Target' class="type">Target</a> = <a class="struct" href="../../rexpect/session/struct.PtySession.html" title="struct rexpect::session::PtySession">PtySession</a></code></span></h4>
+<div class='docblock'><p>The resulting type after dereferencing</p>
+</div><h4 id='method.deref' class="method"><span id='deref.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/deref/trait.Deref.html#tymethod.deref' class='fnname'>deref</a>(&amp;self) -&gt; &amp;<a class="struct" href="../../rexpect/session/struct.PtySession.html" title="struct rexpect::session::PtySession">PtySession</a></code></span></h4>
+<div class='docblock'><p>The method called to dereference a value</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/deref/trait.DerefMut.html" title="trait core::ops::deref::DerefMut">DerefMut</a> for <a class="struct" href="../../rexpect/session/struct.PtyBashSession.html" title="struct rexpect::session::PtyBashSession">PtyBashSession</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/rexpect/session.rs.html#267-271' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.deref_mut' class="method"><span id='deref_mut.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/deref/trait.DerefMut.html#tymethod.deref_mut' class='fnname'>deref_mut</a>(&amp;mut self) -&gt; &amp;mut <a class="struct" href="../../rexpect/session/struct.PtySession.html" title="struct rexpect::session::PtySession">PtySession</a></code></span></h4>
+<div class='docblock'><p>The method called to mutably dereference a value</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html" title="trait core::ops::drop::Drop">Drop</a> for <a class="struct" href="../../rexpect/session/struct.PtyBashSession.html" title="struct rexpect::session::PtyBashSession">PtyBashSession</a></code></span><span class='out-of-band'><div class='ghost'></div><a class='srclink' href='../../src/rexpect/session.rs.html#273-281' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.drop' class="method"><span id='drop.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html#tymethod.drop' class='fnname'>drop</a>(&amp;mut self)</code></span></h4>
+<div class='docblock'><p>A method called when the value goes out of scope. <a href="https://doc.rust-lang.org/nightly/core/ops/drop/trait.Drop.html#tymethod.drop">Read more</a></p>
+</div></div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../../";
+        window.currentCrate = "rexpect";
+    </script>
+    <script src="../../main.js"></script>
+    <script defer src="../../search-index.js"></script>
+</body>
+</html>
