@@ -1,0 +1,7 @@
+$ sleep 999
+--> ^Z
+$ echo hans
+hans
+$ fg
+--> ^C
+$
