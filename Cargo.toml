@@ -9,5 +9,4 @@ readme      = "README.md"
 keywords    = ["binaries", "testing", "bash", "pty", "doctest"]
 
 [dependencies]
-# rexpect = { git = "https://github.com/philippkeller/rexpect" }
-rexpect = { path = "../rexpect" }
+rexpect = { git = "https://github.com/philippkeller/rexpect" }
